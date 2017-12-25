@@ -18,9 +18,9 @@ namespace Blogifier.Controllers
             return View(_theme + "Pages/About.cshtml");
         }
 
-        public IActionResult Imprint()
+        public IActionResult LegalNotice()
         {
-            return View(_theme + "Pages/Imprint.cshtml");
+            return View(_theme + "Pages/LegalNotice.cshtml");
         }
     }
 }
