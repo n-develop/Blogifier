@@ -28,8 +28,12 @@
         <div class="ml-auto">
             @if (User.Identity.IsAuthenticated)
             {
-                <a href="~/admin">Admin</a>
+                <a href="~/admin">Admin</a><span> - </span>
             }
+
+            <a href="~/Pages/LegalNotice">
+                Legal Notice
+            </a>
         </div>
     </div>
 </footer>
