@@ -57,7 +57,7 @@ namespace Blogifier.Controllers
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            if(_db.Profiles.All().Count() == 0)
+            if (!_db.Profiles.All().Any())
                 return RedirectToAction(nameof(AccountController.Register), "Account");
 
             ViewData["ReturnUrl"] = returnUrl;
@@ -92,6 +92,14 @@ namespace Blogifier.Controllers
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return View(model);
                 }
+            }
+            else
+            {
+                var errors = ModelState.Select(x => x.Value.Errors)
+                    .Where(y => y.Count > 0)
+                    .ToList();
+
+                _logger.LogWarning($"ModelState is not valid. '{errors[0]}'");
             }
             return View(model);
         }
@@ -128,7 +136,7 @@ namespace Blogifier.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(string.Format("Created a new account for {0}", user.UserName));
-                    
+
                     // create new profile
                     var profile = new Profile();
 
@@ -136,7 +144,7 @@ namespace Blogifier.Controllers
                     {
                         profile.IsAdmin = true;
                     }
-                    
+
                     profile.AuthorName = model.AuthorName;
                     profile.AuthorEmail = model.Email;
                     profile.Title = "New blog";
