@@ -95,11 +95,9 @@ namespace Blogifier.Controllers
             }
             else
             {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                    .Where(y => y.Count > 0)
-                    .ToList();
+                var errors = ModelState.SelectMany(x => x.Value.Errors.ToList()).Select(x => x.ErrorMessage).ToList();
 
-                _logger.LogWarning($"ModelState is not valid. '{errors[0]}'");
+                _logger.LogWarning($"ModelState is not valid. '{string.Join(";", errors)}'");
             }
             return View(model);
         }
